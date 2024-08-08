@@ -8,27 +8,6 @@ from matplotlib.widgets import RectangleSelector
 from matplotlib.backend_bases import MouseButton
 
 
-def load_distance_matrix(file_path='example_distances.dat'):
-    """example_distances.data是论文补充材料中的数据"""
-    # 读取文件并提取数据
-    distances = np.loadtxt(file_path)
-    # 获取点的数量
-    num_points = int(max(distances[:, :2].max(), distances[:, :2].min()))
-
-    # 创建一个空的距离矩阵
-    distance_matrix = np.zeros((num_points, num_points))
-
-    # 填充距离矩阵
-    for row in distances:
-        i, j, distance = int(row[0]) - 1, int(row[1]) - 1, row[2]
-        distance_matrix[i, j] = distance
-        distance_matrix[j, i] = distance
-
-    # 将对角线设置为0
-    np.fill_diagonal(distance_matrix, 0)
-    return distance_matrix
-
-
 def calculate_dc(distances: np.ndarray) -> float:
     upper_tri = distances[np.triu_indices(distances.shape[0], k=1)]
     sorted_distances = np.sort(upper_tri)
@@ -91,11 +70,8 @@ def generate_decision_graph(rho, delta):
     ax.scatter(rho, delta, c=z, s=30, cmap='plasma', marker='.')
     ax.set_xlabel('rho')
     ax.set_ylabel('delta')
-    ax.set_title('rho-delta Decision Graph')
+    ax.set_title('Decision Graph')
     ax.grid(True, linestyle='--', alpha=0.7)
-
-    # 保存初始图形为 PDF
-    plt.savefig('dp_decision_graph.pdf', dpi=300, bbox_inches='tight')
 
     def select_callback(click_event, release_event):
         # select_callback函数会在用户完成矩形选择后被调用，然后处理用户的选择行为
@@ -172,9 +148,9 @@ def visualize_dp_clustering(data, labels, centroids):
 
 def main():
     # 加载数据集
-    dataset = pd.read_csv('./datasets_from_gbsc/D7.csv').to_numpy()
-    # distances = load_distance_matrix()
-    # dataset = np.loadtxt('sample.txt')
+    dataset = pd.read_csv('./datasets/D7.csv').to_numpy()
+
+    # 计算距离矩阵
     distances = pairwise_distances(dataset)
 
     # 计算截断距离
