@@ -1,0 +1,4 @@
+- OS: Win 10
+- IDE: Pycharm Community
+- Programming Language: Python 3.11
+- Python Packages: Refer to requirements.txt
