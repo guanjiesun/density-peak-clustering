@@ -40,7 +40,8 @@ def calculate_delta(distances: np.ndarray, rho):
 
     delta = np.zeros(n_samples)
     nearest_neighbor = np.full(n_samples, 0)
-    index_rho = np.argsort(rho)[::-1]  # rho降序排序后的数组的元素在rho中的索引
+    # rho降序排序后的数组的元素在rho中的索引
+    index_rho = np.argsort(rho)[::-1]
 
     for i, index in enumerate(index_rho):
         # 对于密度最大的点
@@ -61,7 +62,7 @@ def calculate_delta(distances: np.ndarray, rho):
 
 
 def generate_decision_graph(rho, delta):
-    centroids = list()  # 改名以反映它现在存储索引
+    centroids = list()
     fig, ax = plt.subplots(figsize=(10, 6))
 
     xy = np.vstack([rho, delta])
