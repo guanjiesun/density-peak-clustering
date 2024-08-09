@@ -63,7 +63,7 @@ def calculate_delta(distances: np.ndarray, rho):
     return delta, nearest_neighbor
 
 
-def generate_decision_graph(rho, delta):
+def generate_decision_graph(rho, delta, file_path: Path):
     centroids = list()
     fig, ax = plt.subplots(figsize=(10, 6))
 
@@ -75,6 +75,8 @@ def generate_decision_graph(rho, delta):
     ax.set_ylabel(r'$\delta$')
     ax.set_title('Decision Graph')
     ax.grid(True, linestyle='--', alpha=0.7)
+
+    plt.savefig(file_path.stem + ' Decision Graph.png', dpi=300)
 
     def select_callback(click_event, release_event):
         # select_callback函数会在用户完成矩形选择后被调用，然后处理用户的选择行为
@@ -126,7 +128,7 @@ def assign_points_to_clusters(rho, centroids: list[int], nearest_neighbor):
     return labels
 
 
-def visualize_dp_clustering(data, labels, centroids):
+def visualize_dp_clustering(data, labels, centroids, file_path: Path):
     # k表示聚类中心的数量
     k = len(centroids)
     colors = sns.color_palette("colorblind", k)
@@ -146,6 +148,8 @@ def visualize_dp_clustering(data, labels, centroids):
     if list(idx):
         other_data = data[idx]
         plt.scatter(other_data[:, 0], other_data[:, 1], color='black', marker=".", s=30)
+
+    plt.savefig(file_path.stem + ' Clustering Result.png', dpi=300)
     plt.show()
 
 
@@ -168,13 +172,13 @@ def main():
     delta, nearest_neighbor = calculate_delta(distances, rho)
 
     # 从决策图中选择密度峰值(聚类中心)
-    centroids = generate_decision_graph(rho, delta)
+    centroids = generate_decision_graph(rho, delta, file_path)
 
     # 分配非聚类中心到相应的簇并且返回样本簇标签
     labels = assign_points_to_clusters(rho, centroids, nearest_neighbor)
 
     # 可视化聚类结果
-    visualize_dp_clustering(dataset, labels, centroids)
+    visualize_dp_clustering(dataset, labels, centroids, file_path)
 
 
 if __name__ == "__main__":
