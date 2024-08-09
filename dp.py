@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -69,8 +71,8 @@ def generate_decision_graph(rho, delta):
     z = gaussian_kde(xy)(xy)
     # sc表示散点图上的所有集合
     ax.scatter(rho, delta, c=z, s=30, cmap='plasma', marker='.')
-    ax.set_xlabel('rho')
-    ax.set_ylabel('delta')
+    ax.set_xlabel(r'$\rho$')
+    ax.set_ylabel(r'$\delta$')
     ax.set_title('Decision Graph')
     ax.grid(True, linestyle='--', alpha=0.7)
 
@@ -148,8 +150,10 @@ def visualize_dp_clustering(data, labels, centroids):
 
 
 def main():
+    file_path = Path('./datasets/D1.csv')
+
     # 加载数据集
-    dataset = pd.read_csv('./datasets/D7.csv').to_numpy()
+    dataset = pd.read_csv(file_path).to_numpy()
 
     # 计算距离矩阵
     distances = pairwise_distances(dataset)
